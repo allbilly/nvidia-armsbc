@@ -190,9 +190,9 @@ query_fedora_version() {
     # Enable RPM Fusion repos if not already present
     if ! dnf repolist 2>/dev/null | grep -q rpmfusion; then
         log "Enabling RPM Fusion repositories"
-        dnf install -y \
-            "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${DISTRO_VERSION}.noarch.rpm" \
-            "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${DISTRO_VERSION}.noarch.rpm" \
+        dnf install -y --nogpgcheck \
+            "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
+            "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" \
             2>/dev/null || true
     fi
 
