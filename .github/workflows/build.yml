@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     strategy:
       matrix:
-        ubuntu: ["24.04", "25.10"]
+        ubuntu: ["24.04", "25.10", "26.04"]
     container:
       image: ubuntu:${{ matrix.ubuntu }}
     steps:
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     strategy:
       matrix:
-        fedora: ["43", "rawhide"]
+        fedora: ["43", "44", "rawhide"]
     container:
       image: fedora:${{ matrix.fedora }}
     steps:
@@ -80,7 +80,7 @@ jobs:
     environment: production
     strategy:
       matrix:
-        ubuntu: ["24.04", "25.10"]
+        ubuntu: ["24.04", "25.10", "26.04"]
     container:
       image: ubuntu:${{ matrix.ubuntu }}
     env:
@@ -114,6 +114,7 @@ jobs:
           case "$UBUNTU_VERSION" in
             24.04) CODENAME="noble" ;;
             25.10) CODENAME="questing" ;;
+            26.04) CODENAME="resolute" ;;
             *) CODENAME="$UBUNTU_VERSION" ;;
           esac
 
@@ -141,7 +142,7 @@ jobs:
     environment: production
     strategy:
       matrix:
-        fedora: ["43", "rawhide"]
+        fedora: ["43", "44", "rawhide"]
     container:
       image: fedora:${{ matrix.fedora }}
     env:

@@ -12,8 +12,8 @@ Please be advised that I am just packaging these existing patches. It's unlikely
 
 ## Requirements
 
-- **Ubuntu** 24.04, 25.10 (`.deb` with DKMS)
-- **Fedora** 43, rawhide (`.rpm` with akmod)
+- **Ubuntu** 24.04, 25.10, 26.04 (`.deb` with DKMS)
+- **Fedora** 43, 44, rawhide (`.rpm` with akmod)
 
 The patches were mostly tested on the RK3588 platform (like the Orange Pi 5 Plus), using a kernel with a 4k page size. The default devicetree memory maps on these platforms are not compatible out of the box with these drivers. It is recommended you boot with a [UEFI EDK2 firmware](https://github.com/edk2-porting/edk2-rk3588) that was ported to these platforms, which has been configured with an updated device tree, and is capable of booting mainline ARM linux distributions.
 
@@ -29,13 +29,16 @@ curl -fsSL https://pkg.scottjg.com/nvidia-armsbc/signing-key.asc | sudo gpg --de
 
 # Add repository
 echo "deb [signed-by=/usr/share/keyrings/nvidia-armsbc.gpg] https://pkg.scottjg.com/nvidia-armsbc/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/nvidia-armsbc.list
+sudo apt update
 
 # First, find the latest available driver major version:
 NVIDIA_VERSION=$(apt-cache search nvidia-dkms | grep -oP 'nvidia-dkms-\K[0-9]+(?=-open)' | sort -n | tail -1)
 echo "Latest NVIDIA driver version: $NVIDIA_VERSION"
 
+# if you're on a raspberry pi kernel, install the raspi kernel headers
+uname -r |egrep -q 'raspi$' && sudo apt install linux-headers-raspi
+
 # Install this kernel driver
-sudo apt update
 sudo apt install -y nvidia-dkms-${NVIDIA_VERSION}-open-armsbc
 
 # Install NVIDIA userspace (from Ubuntu repos)
